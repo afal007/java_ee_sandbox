@@ -1,24 +1,27 @@
 package ru.afal.app.model;
 
-import com.sun.istack.internal.NotNull;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
 public class Customer {
 	@Id
-	@GeneratedValue
+	@GeneratedValue( strategy = GenerationType.IDENTITY )
 	private Long id;
 
 	private String name;
 
-	@NotNull
+	@Column( unique = true, nullable = false )
 	private String login;
 
-	@NotNull
+	@Column( nullable = false )
 	private String password;
 
 	private BigDecimal balance;
@@ -30,6 +33,17 @@ public class Customer {
 		this.login = login;
 		this.password = password;
 		this.balance = balance;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer{" +
+				       "id=" + id +
+				       ", name='" + name + '\'' +
+				       ", login='" + login + '\'' +
+				       ", password='" + password + '\'' +
+				       ", balance=" + balance +
+				       '}';
 	}
 
 	public Long getId() {

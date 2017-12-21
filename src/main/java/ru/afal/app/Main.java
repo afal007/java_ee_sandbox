@@ -14,17 +14,28 @@ public class Main {
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory( "PU" );
 		EntityManager em = emf.createEntityManager();
+		EntityTransaction et = null;
 
 		try {
-			EntityTransaction et = em.getTransaction();
+			et = em.getTransaction();
 			et.begin();
 			em.persist( customer );
 			et.commit();
+
+			Customer customerDb = em.find( Customer.class, 1L );
+			System.out.println( customerDb );
 		} catch ( Exception e ) {
-			System.out.print( "Everything is wrong" );
+			if( et != null ) {
+				et.rollback();
+			}
+			e.printStackTrace();
 		} finally {
-			emf.close();
-			em.close();
+			if( emf.isOpen() ) {
+				emf.close();
+			}
+			if ( em.isOpen() ) {
+				em.close();
+			}
 		}
 	}
 }
