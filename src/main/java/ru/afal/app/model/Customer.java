@@ -40,7 +40,6 @@ public class Customer {
 	 * optional             - дает возможность определить опциональность данного параметра
  	 */
 	@ElementCollection( fetch = FetchType.LAZY, targetClass = User.class )
-	@CollectionTable( name = "User")
 	private List<User> userList;
 
 	/**
@@ -51,7 +50,7 @@ public class Customer {
 	private byte[] loginPassEncoded;
 
 	@Transient
-	private static ThreadLocal<Base64.Encoder> encoder = new ThreadLocal<>();
+	private static ThreadLocal<Base64.Encoder> encoder = ThreadLocal.withInitial( Base64::getEncoder );
 
 	public Customer() {}
 
@@ -120,5 +119,13 @@ public class Customer {
 
 	public void setLoginPassEncoded( byte[] loginPassEncoded ) {
 		this.loginPassEncoded = loginPassEncoded;
+	}
+
+	public List<User> getUserList() {
+		return userList;
+	}
+
+	public void setUserList( List<User> userList ) {
+		this.userList = userList;
 	}
 }

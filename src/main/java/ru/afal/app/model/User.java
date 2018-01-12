@@ -9,9 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  * Сущность заводится кокретным клиентом ({@link Customer}) и в отрыве от него существовать не может.
@@ -22,9 +19,8 @@ import javax.persistence.Id;
  */
 @Embeddable
 @Access( value = AccessType.PROPERTY )
-public class User {
+public class User{
 
-	private Long id;
 	private String name;
 	private String login;
 	private String password;
@@ -48,21 +44,10 @@ public class User {
 	@Override
 	public String toString() {
 		return "User{" +
-				       "id=" + id +
-				       ", name='" + name + '\'' +
+				       "name='" + name + '\'' +
 				       ", login='" + login + '\'' +
 				       ", password='" + password + '\'' +
 				       '}';
-	}
-
-	@Id
-	@GeneratedValue( strategy = GenerationType.IDENTITY )
-	public Long getId() {
-		return id;
-	}
-
-	public void setId( Long id ) {
-		this.id = id;
 	}
 
 	public String getName() {
