@@ -2,6 +2,7 @@ package ru.afal.app.model;
 
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -10,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Base64;
@@ -39,7 +41,7 @@ public class Customer {
 	 * {@link FetchType}    - определяет как доставать данные из БД - жадно или лениво
 	 * optional             - дает возможность определить опциональность данного параметра
  	 */
-	@ElementCollection( fetch = FetchType.LAZY, targetClass = User.class )
+	@OneToMany( targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<User> userList;
 
 	/**

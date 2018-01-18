@@ -25,10 +25,11 @@ public class Main {
 		try {
 			et = em.getTransaction();
 			et.begin();
+			em.persist( user );
 			em.persist( customer );
 			et.commit();
 
-			Customer    customerDb  = em.find( Customer.class, 1L );
+			Customer customerDb  = em.find( Customer.class, 1L );
 			System.out.println( customerDb );
 			System.out.println( customerDb.getUserList() );
 		} catch ( Exception e ) {

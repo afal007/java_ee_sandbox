@@ -1,4 +1,4 @@
-package ru.afal.app.model;
+package ru.afal.app.model.testclasses;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;

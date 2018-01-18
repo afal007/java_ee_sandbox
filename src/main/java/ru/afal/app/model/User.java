@@ -7,20 +7,23 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
- * Сущность заводится кокретным клиентом ({@link Customer}) и в отрыве от него существовать не может.
- * Для того, чтобы это подчеркнуть, используется аннотация {@link Embeddable}.
  * Используется accessType - propertyAccess. То есть аннотации, связанные с полями, навешиваются на аксессоры.
  * По умолчанию используется accessType сущности, в которую встраивается {@link Embeddable}. Поэтому
  * рекомендуется явно указывать {@link Access}.
  */
-@Embeddable
+@Entity
 @Access( value = AccessType.PROPERTY )
 public class User{
 
+	private Long id;
 	private String name;
 	private String login;
 	private String password;
@@ -48,6 +51,16 @@ public class User{
 				       ", login='" + login + '\'' +
 				       ", password='" + password + '\'' +
 				       '}';
+	}
+
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	public Long getId() {
+		return id;
+	}
+
+	public void setId( Long id ) {
+		this.id = id;
 	}
 
 	public String getName() {
