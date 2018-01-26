@@ -15,8 +15,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 import static ru.afal.app.model.Customer.FIND_ALL;
 
@@ -26,7 +28,7 @@ public class Customer {
 	public final static String FIND_ALL = "Customer.findAll";
 
 	@Id
-	@GeneratedValue( strategy = GenerationType.IDENTITY )
+	@GeneratedValue( strategy = GenerationType.TABLE )
 	private Long id;
 
 	private String name;
@@ -45,7 +47,7 @@ public class Customer {
 	/**
 	 * Используем аннотацию {@link Basic} чтобы определить базовые параметры для сохранения данных.
 	 * {@link FetchType}    - определяет как доставать данные из БД - жадно или лениво
-	 * optional             - дает возможность определить опциональность данного параметра
+	 * optional             - дает возможность определить опциональность данного поля
  	 */
 	@OneToMany( targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<User> userList;
@@ -79,6 +81,23 @@ public class Customer {
 				       ", password='" + password + '\'' +
 				       ", balance=" + balance +
 				       '}';
+	}
+
+	@Override
+	public boolean equals( Object o ) {
+		if ( this == o ) return true;
+		if ( o == null || getClass() != o.getClass() ) return false;
+		Customer customer = ( Customer ) o;
+		return Objects.equals( id, customer.id ) &&
+				       Objects.equals( name, customer.name ) &&
+				       Objects.equals( login, customer.login ) &&
+				       Objects.equals( password, customer.password );
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash( id, name, login, password );
 	}
 
 	public Long getId() {
