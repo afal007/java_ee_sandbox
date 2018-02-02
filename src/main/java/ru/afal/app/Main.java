@@ -3,10 +3,10 @@ package ru.afal.app;
 import ru.afal.app.model.Customer;
 import ru.afal.app.model.User;
 import ru.afal.app.model.enums.UserType;
+import ru.afal.app.utils.TransactionHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -20,8 +20,6 @@ import java.util.List;
 public class Main {
 	private static EntityManagerFactory emf     = Persistence.createEntityManagerFactory( "PU" );
 	private static EntityManager        em      = emf.createEntityManager();
-
-
 
 	public static void main (String[] args) {
 		insertData();
@@ -42,8 +40,9 @@ public class Main {
 	}
 
 	private static void execNativeSQL() {
-		Query nativeQuery = em.createNativeQuery( "SELECT * FROM CUSTOMER" );
-		List<Object[]> resultList = nativeQuery.getResultList();
+		TransactionHelper helper = new TransactionHelper( Const.PERSISTENCE_UNIT );
+		List<Object[]> resultList = helper.nativeQuery( "SELECT * FROM CUSTOMER" );
+
 		Object[] list = resultList.get( 0 );
 		System.out.println( "NativeQuery:\t" + list[0] + " "  + list[1] + " " + list[2] + " "+ list[3] + " "+ list[4] );
 	}
@@ -68,32 +67,19 @@ public class Main {
 	}
 
 	private static void insertData() {
-		Customer customer = new Customer( "Name", "login", "password", new BigDecimal( 10 ) );
-		User user = new User( "Name", "login", "password", UserType.USER );
+		TransactionHelper helper = new TransactionHelper( Const.PERSISTENCE_UNIT );
 
-		customer.setUserList( Collections.singletonList( user ) );
+		helper.transaction( (em) -> {
+			Customer customer = new Customer( "Name", "login", "password", new BigDecimal( 10 ) );
+			User user = new User( "Name", "login", "password", UserType.USER );
 
-		EntityTransaction et = null;
-
-		try {
-			et = em.getTransaction();
-			et.begin();
+			customer.setUserList( Collections.singletonList( user ) );
 			em.persist( customer );
-			et.commit();
+		} );
 
+		helper.transaction( (em) -> {
 			Customer customerDb = em.find( Customer.class, 1L );
 			System.out.println( "EM:\t" + customerDb );
 			System.out.println( customerDb.getUserList() );
-		} catch ( Exception e ) {
-			if( et != null ) {
-				et.rollback();
-			}
-			e.printStackTrace();
-		}
-//		} finally {
-//			if( emf.isOpen() ) {
-//				emf.close();
-//			}
-//			if ( em.isOpen() ) {
-//				em.close();
-}   }   //}   }
+		});
+}   }
