@@ -52,6 +52,9 @@ public class Customer {
 	@OneToMany( targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<User> userList;
 
+	@OneToMany( targetEntity = Subscription.class )
+	private List<Subscription> subscriptionList;
+
 	/**
 	 * Предположим, что нам не нужно хранить какую-то информацию в базе, но при этом она будет полезна в рамках классов.
 	 * Используем аннотацию {@link Transient}.
@@ -96,7 +99,6 @@ public class Customer {
 
 	@Override
 	public int hashCode() {
-
 		return Objects.hash( id, name, login, password );
 	}
 
@@ -154,5 +156,13 @@ public class Customer {
 
 	public void setUserList( List<User> userList ) {
 		this.userList = userList;
+	}
+
+	public List<Subscription> getSubscriptionList() {
+		return subscriptionList;
+	}
+
+	public void setSubscriptionList( List<Subscription> subscriptionList ) {
+		this.subscriptionList = subscriptionList;
 	}
 }
