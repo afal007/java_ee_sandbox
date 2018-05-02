@@ -1,5 +1,6 @@
 package ru.afal.app;
 
+import ru.afal.app.business.CustomerService;
 import ru.afal.app.model.Customer;
 import ru.afal.app.model.User;
 import ru.afal.app.model.enums.UserType;
@@ -17,6 +18,9 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
+
 public class Main {
 	private static EntityManagerFactory emf     = Persistence.createEntityManagerFactory( "PU" );
 	private static EntityManager        em      = emf.createEntityManager();
@@ -31,6 +35,13 @@ public class Main {
 		execNamedQuery();
 
 		execCriteriaQuery();
+
+		Weld weld = new Weld();
+		WeldContainer weldContainer = weld.initialize();
+		CustomerService customerService = weldContainer.instance().select( CustomerService.class ).get();
+		Customer        customer        = customerService.createCustomer( "John Smith", "john" );
+		System.out.println( customer );
+		weld.shutdown();
 	}
 
 	private static void execNamedQuery() {

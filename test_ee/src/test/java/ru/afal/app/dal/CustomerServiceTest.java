@@ -1,33 +1,29 @@
 package ru.afal.app.dal;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import ru.afal.app.model.Customer;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-@Transactional
-public class CustomerDAOTest {
+import ru.afal.app.business.CustomerService;
+import ru.afal.app.model.Customer;
+
+public class CustomerServiceTest {
 
 	private static EntityManagerFactory emf;
+	private static CustomerService customerService;
 
 	@BeforeClass
 	public static void setup() {
 		emf = Persistence.createEntityManagerFactory( "PU_test" );
+		customerService = new CustomerService();
 	}
 
 	@Before
@@ -51,19 +47,15 @@ public class CustomerDAOTest {
 	public void create() {
 		String      name     = "Name";
 		String      login    = "login";
-		String      password = "password";
-		BigDecimal  balance  = new BigDecimal( 1000.1 );
 
-		Customer customer = new Customer( name, login, password, balance );
+		Customer customer = customerService.createCustomer( name, login );
 
-		CustomerDAO dao = new CustomerDAO( emf );
-		assertTrue( dao.create( customer ) );
+		Assert.assertEquals( "Имя", 	name, 	customer.getName() );
+		Assert.assertEquals( "Логин", 	login, 	customer.getLogin() );
 
-		TypedQuery<Customer> query = emf.createEntityManager().createQuery( "SELECT c FROM Customer c", Customer.class );
-		List<Customer> resultList = query.getResultList();
+		Assert.assertNotNull( "Пароль", customer.getPassword() );
 
-		assertTrue( "Нашли ровно 1 сущность", resultList.size() == 1 );
-		assertEquals( customer, resultList.get( 0 ) );
+		System.out.print( customer.getPassword() );
 	}
 
 	@Test

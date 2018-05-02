@@ -63,6 +63,7 @@ public class TransactionHelper {
 
 	/**
 	 * Функциональный интерфейс для определения последовательности операций в транзакции.
+	 * (Можно было использовать {@link java.util.function.Consumer<EntityManager>})
 	 */
 	public interface TransactionAction {
 		/**
