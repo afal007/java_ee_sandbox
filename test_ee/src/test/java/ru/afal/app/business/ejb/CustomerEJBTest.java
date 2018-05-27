@@ -1,9 +1,6 @@
 package ru.afal.app.business.ejb;
 
-import java.io.File;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.ejb.embeddable.EJBContainer;
 import javax.naming.Context;
@@ -15,8 +12,6 @@ import org.junit.Test;
 
 import ru.afal.app.model.Customer;
 
-import static org.junit.Assert.*;
-
 public class CustomerEJBTest {
 
     static EJBContainer ejbContainer;
@@ -24,9 +19,7 @@ public class CustomerEJBTest {
 
     @BeforeClass
     public static void beforeClass() {
-        Map<String, Object> properties = new HashMap<>();
-        properties.put( EJBContainer.MODULES, new File( "classes" ) );
-        ejbContainer = EJBContainer.createEJBContainer( properties );
+        ejbContainer = EJBContainer.createEJBContainer( );
         context = ejbContainer.getContext();
     }
 
