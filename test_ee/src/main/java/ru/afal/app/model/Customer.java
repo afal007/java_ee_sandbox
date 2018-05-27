@@ -1,11 +1,12 @@
 package ru.afal.app.model;
 
+import java.math.BigDecimal;
+import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,16 +14,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
 
 import static ru.afal.app.model.Customer.FIND_ALL;
 
 @Entity
+@Table( name = "CUSTOMER" )
 @NamedQuery( name = FIND_ALL, query = "SELECT c FROM Customer c")
 public class Customer {
 	public final static String FIND_ALL = "Customer.findAll";
